@@ -1,0 +1,87 @@
+PODS:
+  - Alamofire (4.4.0)
+  - DGElasticPullToRefresh (1.1)
+  - HandyJSON (1.7.1)
+  - IBAnimatable (3.1.3)
+  - Kingfisher (3.6.1)
+  - MJRefresh (3.1.12)
+  - Moya (8.0.3):
+    - Moya/Core (= 8.0.3)
+  - Moya/Core (8.0.3):
+    - Alamofire (~> 4.1)
+    - Result (~> 3.0)
+  - Moya/ReactiveSwift (8.0.3):
+    - Moya/Core
+    - ReactiveSwift (~> 1.0)
+  - Moya/RxSwift (8.0.3):
+    - Moya/Core
+    - RxSwift (~> 3.0)
+  - PKHUD (4.2.1)
+  - ReactiveSwift (1.1.1):
+    - Result (~> 3.2)
+  - Result (3.2.1)
+  - RxCocoa (3.4.0):
+    - RxSwift (~> 3.4)
+  - RxSwift (3.4.0)
+  - SnapKit (3.2.0)
+  - SwiftyJSON (3.1.4)
+  - YYText (1.0.7)
+
+DEPENDENCIES:
+  - DGElasticPullToRefresh
+  - HandyJSON (from `https://github.com/alibaba/HandyJSON.git`, tag `1.7.1`)
+  - IBAnimatable
+  - Kingfisher
+  - MJRefresh
+  - Moya
+  - Moya/ReactiveSwift
+  - Moya/RxSwift
+  - PKHUD (~> 4.0)
+  - RxCocoa (from `https://github.com/ReactiveX/RxSwift.git`, tag `3.4.0`)
+  - RxSwift (from `https://github.com/ReactiveX/RxSwift.git`, tag `3.4.0`)
+  - SnapKit
+  - SwiftyJSON
+  - YYText
+
+EXTERNAL SOURCES:
+  HandyJSON:
+    :git: https://github.com/alibaba/HandyJSON.git
+    :tag: 1.7.1
+  RxCocoa:
+    :git: https://github.com/ReactiveX/RxSwift.git
+    :tag: 3.4.0
+  RxSwift:
+    :git: https://github.com/ReactiveX/RxSwift.git
+    :tag: 3.4.0
+
+CHECKOUT OPTIONS:
+  HandyJSON:
+    :git: https://github.com/alibaba/HandyJSON.git
+    :tag: 1.7.1
+  RxCocoa:
+    :git: https://github.com/ReactiveX/RxSwift.git
+    :tag: 3.4.0
+  RxSwift:
+    :git: https://github.com/ReactiveX/RxSwift.git
+    :tag: 3.4.0
+
+SPEC CHECKSUMS:
+  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
+  HandyJSON: b0352e4c52169de4a31e9b77f9c08c1b0deffc8f
+  IBAnimatable: ad640d47659cbbfa4cf88a127fdc663b2ec4c66a
+  Kingfisher: 2f31cb75f3e98d3d4c406cbdcd9b263e956cfa67
+  MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
+  Moya: d3721622e3cc0cc2f038d69a258686f0b66e7252
+  PKHUD: 957ce2a68b3c97a51839b30216120c1dbc0c3a78
+  ReactiveSwift: 2489549e3231a6ff68ec99f3d320bb264f10ba0a
+  Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
+  RxCocoa: 340254e41293a97d2be220592ea7d1e73980b1d5
+  RxSwift: c744f5eb1c13a8acce49bb40fda553da7bf31046
+  SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+  YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
+
+PODFILE CHECKSUM: d33caba08174112c7a311ccc68943762fbf1b7eb
+
+COCOAPODS: 1.2.0
