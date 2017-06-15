@@ -8,14 +8,55 @@
 
 import Foundation
 import SwiftyJSON
+import RxDataSources
 struct homeModel{
     var recommend_data:homeRecommendModel?
-    var  Common_data:homeRecommendModel?
+    var common_data:homeCommonModel?
+    var sections:[sectionsModel] = [];
+    init(recommend_data:homeRecommendModel,common_data:homeCommonModel) {
+        self.recommend_data = recommend_data;
+        self.common_data = common_data;
+        var rows =  [] + recommend_data.lives;
+        rows.insert(recommend_data.banner_data.first!, at: Int(Double( recommend_data.lives.count) * 0.5))
+        sections.append(sectionsModel.init(headerModel: recommend_data.partition, rows: rows))
+        
+        sections  = sections + common_data.partitions.map{sectionsModel.init(headerModel: $0.partition, rows:$0.lives.randomNumber(num: 4))}
+        
+        
+        
+    }
+    
+  
+}
+
+struct sectionsModel {
+    var headerModel: partitionModel
+    var  rows: [Item]
+    init(headerModel:partitionModel,rows: [Item]) {
+        self.headerModel = headerModel
+        self.rows = rows;
+    }
+}
+extension sectionsModel:SectionModelType{
+   
+    typealias Item = livesModel
+    var items: [Item]{
+        return rows
+    }
+    
+    
+    
+    init(original: sectionsModel, items: [sectionsModel.Item]) {
+        self = original
+        self.rows = items;
+        
+    }
+
 }
 struct homeRecommendModel {
-    let lives: Array<livesModel>?
-    let partition:partitionModel?
-    let banner_data:Array<livesModel>?
+    let lives: Array<livesModel>
+    let partition:partitionModel
+    let banner_data:Array<livesModel>
     init(json:JSON) {
         lives = json["lives"].arrayValue.map{
             livesModel.init(json: $0)
@@ -27,19 +68,19 @@ struct homeRecommendModel {
     }
 }
 struct livesModel {
-    let owner:ownerModel?
-    let cover:coverModel?
-    let room_id:Int?
-    let check_version:Int?
-    let online:Int?
-    let area:String?
-    let area_id:Int?
-    let title:String?
+    let owner:ownerModel
+    let cover:coverModel
+    let room_id:Int
+    let check_version:Int
+    let online:Int
+    let area:String
+    let area_id:Int
+    let title:String
     let playurl:URL?
-    let accept_quality:String?
-    let broadcast_type:Int?
-    let is_tv:Bool?
-    
+    let accept_quality:String
+    let broadcast_type:Int
+    let is_tv:Bool
+    let is_clip:Bool
     init(json:JSON) {
         accept_quality = json["accept_quality"].stringValue
         area = json["area"].stringValue
@@ -53,6 +94,7 @@ struct livesModel {
         playurl = json["playurl"].url
         room_id = json["room_id"].intValue
         title = json["title"].stringValue
+        is_clip = json["is_clip"].boolValue
     }
   
     
@@ -60,8 +102,8 @@ struct livesModel {
 }
 struct ownerModel {
     let face:URL?
-    let mid:Int?
-    let name:String?
+    let mid:Int
+    let name:String
    
     
     init(fromJson json:JSON) {
@@ -73,11 +115,11 @@ struct ownerModel {
 }
 struct coverModel {
     let src:URL?
-    let height:Float?
-    let width:Float?
+    let height:Float
+    let width:Float
     
     init(fromJson json:JSON) {
-        src = json["src"].url
+        src = json["src"].url!
         height = json["height"].floatValue
         width = json["width"].floatValue
     }
@@ -85,11 +127,11 @@ struct coverModel {
 
 struct partitionModel {
     typealias SubIcon = coverModel
-    let area : String!
-    let count : Int!
-    let id : Int!
-    let name : String!
-    let subIcon : SubIcon!
+    let area : String
+    let count : Int
+    let id : Int
+    let name : String
+    let subIcon : SubIcon
     init(fromJson json:JSON) {
         area = json["area"].stringValue
         count = json["count"].intValue
@@ -101,10 +143,10 @@ struct partitionModel {
 
 
 struct homeCommonModel {
-    let banner:Array<bannerModel>?
-    let entranceIcons:Array<entranceIconsModel>?
-    let partitions:Array<partitionsModel>?
-    let navigator:Array<entranceIconsModel>?
+    let banner:Array<bannerModel>
+    let entranceIcons:Array<entranceIconsModel>
+    let partitions:Array<partitionsModel>
+    let navigator:Array<entranceIconsModel>
     init(json:JSON) {
         banner = json["banner"].arrayValue.map{
             bannerModel.init(json: $0)
@@ -122,9 +164,9 @@ struct homeCommonModel {
 }
 struct bannerModel {
     let img:URL?
-    let remark:String?
+    let remark:String
     let link:URL?
-    let title:String?
+    let title:String
     
     init(json:JSON) {
         img = json["img"].url
@@ -136,9 +178,9 @@ struct bannerModel {
 
 struct entranceIconsModel {
     typealias entranceIcon = coverModel
-    let id:Int?
-    let name:String?
-    let entrance_icon:entranceIcon?
+    let id:Int
+    let name:String
+    let entrance_icon:entranceIcon
     init(json:JSON) {
         id = json["id"].intValue
         name = json["name"].stringValue
@@ -147,8 +189,8 @@ struct entranceIconsModel {
 }
 
 struct partitionsModel {
-    let partition:partitionModel?
-    let lives: Array<livesModel>?
+    let partition:partitionModel
+    let lives: Array<livesModel>
     init(json:JSON) {
         lives = json["lives"].arrayValue.map{
             livesModel.init(json: $0)

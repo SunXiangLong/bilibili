@@ -7,21 +7,27 @@
 //
 
 import UIKit
-public let SXScreenBounds = UIScreen.main.bounds
+import SwiftyBeaver
+
+public let log = SwiftyBeaver.self
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    
+    var blockRotation: Bool = false
     
     var window: UIWindow?
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        window = UIWindow.init(frame: SXScreenBounds)
+        let console = ConsoleDestination()
+        log.addDestination(console)
+   
+        
+        window = UIWindow.init(frame: UIScreen.main.bounds)
         window?.backgroundColor = UIColor.white
         window?.rootViewController = SXLaunxhViewController()
-        
         window?.makeKeyAndVisible()
         return true
     }
@@ -46,6 +52,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+      
+        return self.blockRotation ? .all:.portrait
     }
 
 

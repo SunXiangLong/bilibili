@@ -41,62 +41,46 @@ private func JSONResponseDataFormatter(_ data: Data) -> Data {
 }
 /// 一个闭包当XiaoMaBao存在的时候 添加header
 let endpointClosure = { (target: Bilibili) -> Endpoint<Bilibili> in
-    
     let url = target.baseURL.appendingPathComponent(target.path).absoluteString
-    
     return Endpoint<Bilibili>(url: url, sampleResponseClosure: {.networkResponse(200, target.sampleData)}, method: target.method, parameters: target.parameters)
-        
         //        .adding(parameters: appendedParams as [String : AnyObject])
         .adding(newHTTPHeaderFields: headerFields)
 }
-
-
 let  BilibiliProvider =  RxMoyaProvider<Bilibili>(/*endpointClosure: endpointClosure,*/plugins: [NetworkLoggerPlugin(verbose: false, responseDataFormatter: JSONResponseDataFormatter)/*,RequestAlertPlugin()*/])
-let XiaoMabaoProviderNoHUD =  RxMoyaProvider<Bilibili>(endpointClosure: endpointClosure,plugins: [NetworkLoggerPlugin(verbose: true, responseDataFormatter: JSONResponseDataFormatter)])
-
+//let XiaoMabaoProviderNoHUD =  RxMoyaProvider<Bilibili>(endpointClosure: endpointClosure,plugins: [NetworkLoggerPlugin(verbose: true, responseDataFormatter: JSONResponseDataFormatter)])
 public enum Bilibili {
     case getAppNewIndex_recommend(scale:String)
-    
+    case getAppNewIndex_common(scale:String)
 }
-
 /// 自定义插件实现请求添加HUD
 final class RequestAlertPlugin: PluginType {
     
     func willSend(_ request: RequestType, target: TargetType) {
         //实现发送请求前需要做的事情
-        
         HUD.dimsBackground = false;
         HUD.show(.systemActivity)
     }
-    
     func didReceive(_ result: Result<Moya.Response, MoyaError>, target: TargetType) {
         HUD.hide()
         guard case Result.failure(_) = result else { return }//只监听失败
         HUD.flash(.error, delay: 1)
-       
-        
     }
-    
 }
 
 // MARK: - 请求的参数
 extension Bilibili:TargetType{
-    
     public var baseURL: URL {
-        
         switch self {
-        case .getAppNewIndex_recommend(_):
+        default:
             return URL(string: api_live)!
-            
         }
     }
-    
     public var path: String {
         switch self {
         case .getAppNewIndex_recommend(_):
             return "/AppNewIndex/recommend"
-            
-            
+        case .getAppNewIndex_common(_):
+            return "/AppNewIndex/common"
         }
     }
     public var method: Moya.Method {
@@ -108,16 +92,21 @@ extension Bilibili:TargetType{
             return ["scale":scale,
                     "actionKey": "appkey",
                     "appkey": "27eb53fc9058f8c3",
-                    "build":"4470",
+                    "build":"5570",
                     "buvid":"aa4ee2ed6d2ec78089a21c86093a298b",
 //                    "channel":"appstore",
                     "device":"phone",
                     "mobi_app":"iphone",
                     "platform":"ios",
-                    "sign":"f199a745c05342aa22cdb4f379fcc998",
-                    "ts": "1495423952"//Int(Date().timeIntervalSince1970)
+                    "sign":"50650aa4031b3ffd7d6a96fcf45bca36",
+                    "ts": "1496717388"//Int(Date().timeIntervalSince1970)
             ]
             
+        case .getAppNewIndex_common(let scale):
+            return ["scale":scale,
+                    "device":"phone",
+                    "platform":"ios",
+            ]
             
         }
     }
@@ -132,7 +121,8 @@ extension Bilibili:TargetType{
         switch self {
         case .getAppNewIndex_recommend(_):
             return true
-            
+        case .getAppNewIndex_common(scale: _):
+            return true
         }
     }
     public var sampleData: Data {

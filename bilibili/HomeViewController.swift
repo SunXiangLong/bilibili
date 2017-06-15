@@ -12,13 +12,23 @@ import SwiftyJSON
 
 class HomeViewControlvar: BaseViewController {
     
-    //    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var topView: UIView!
+//    @IBOutlet weak var scrollView: UIScrollView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
+        
     }
-    
+    func setUI() {
+        topView.snp.makeConstraints {
+            $0.centerX.equalTo(UIScreenWidth*0.5)
+            $0.width.equalTo(132);
+            $0.height.equalTo(44);
+            $0.bottom.equalTo(0);
+        }
+        
+        
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

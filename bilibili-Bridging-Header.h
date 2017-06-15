@@ -3,5 +3,5 @@
 //
 #ifndef bilibili_Bridging_Header_h
 #define bilibili_Bridging_Header_h
-#
+
 #endif

@@ -48,6 +48,7 @@ class SXBilibiliNormalRefresh: MJRefreshHeader {
   
     override func prepare() {
         super.prepare()
+        self.mj_y = -188;
         self.mj_h = 88
         //标签
         self.addSubview(self.logoImageView)

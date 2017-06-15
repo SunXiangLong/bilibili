@@ -7,7 +7,9 @@
 //
 
 import UIKit
-
+public let UIScreenWidth = UIScreen.main.bounds.width
+public let UIScreenHeight = UIScreen.main.bounds.height
+public let mainPlaceHolderBgColor  = UIColor.init(colorLiteralRed: 0.94, green: 0.94, blue: 0.94, alpha: 1)
 extension UIView {
     var width: CGFloat {
         get { return self.frame.size.width }

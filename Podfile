@@ -1,6 +1,7 @@
 use_frameworks!
 
 target 'bilibili' do
+   pod 'SwiftyBeaver'
    pod 'SnapKit'
    pod 'YYText'
    pod 'MJRefresh'
@@ -14,9 +15,11 @@ target 'bilibili' do
    pod 'SwiftyJSON'
    pod 'Moya'
    pod 'Moya/RxSwift'
-   pod 'Moya/ReactiveSwift'
+#   pod 'Moya/ReactiveSwift'
+   pod 'UITableView+FDTemplateLayoutCell'
    pod 'RxSwift',:git => 'https://github.com/ReactiveX/RxSwift.git', :tag => '3.4.0'
    pod 'RxCocoa',:git => 'https://github.com/ReactiveX/RxSwift.git', :tag => '3.4.0'
-   
+   pod 'RxDataSources'
+   pod 'GDPerformanceView-Swift'
 end
 

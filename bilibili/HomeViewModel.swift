@@ -10,6 +10,9 @@ import Foundation
 import RxSwift
 import RxCocoa
 import SwiftyJSON
+protocol PostsNavigator {
+    func toPost(_ model: livesModel)
+}
 
 enum refreshStatus: Int {
     case dropDownSuccess // 下拉成功
@@ -19,14 +22,14 @@ enum refreshStatus: Int {
 }
 
 final class HomeViewModel: ViewModelType {
-   private let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     struct Input {
         let scale:Driver<String>
         let selection: Driver<IndexPath>
     }
     struct Output {
-        let liveModelArr: Driver<[livesModel]>
-        let selectedPost: Driver<livesModel>
+        let homeModel: Driver<homeModel>
+//        let selectedPost: Driver<livesModel>
         let refreshStatus: Driver<refreshStatus>
     }
     private let navigator: UINavigationController
@@ -34,23 +37,22 @@ final class HomeViewModel: ViewModelType {
         
         self.navigator = navigator
     }
-    
+    func selected(model:livesModel) {
+        print(model)
+    }
     func transform( input: HomeViewModel.Input) -> HomeViewModel.Output {
         
-        let liveModelArr = input.scale.flatMapLatest {[unowned self]  (scale) in
-            return self.data(sale: scale).asDriverOnErrorJustComplete()
+        let homeModel = input.scale.flatMapFirst{
+            return self.data(sale: $0).asDriverOnErrorJustComplete()
         }
         
-        let selectedLivesModel  = input.selection.withLatestFrom(liveModelArr.scan([]){$1}) { (indexPath, livesModelArr) -> livesModel in
-            return livesModelArr[indexPath.row]
-        }
         let refreshStatus = Observable<refreshStatus>.create{ observable in
             
-            _ =   liveModelArr
+            _ =   homeModel
                 .asObservable()
                 .map{
                     
-                    if  $0.count > 0{
+                    if  ($0.common_data?.partitions.count)! > 0{
                         observable.onNext(.dropDownSuccess)
                     }else{
                         observable.onNext(.invalidData)
@@ -64,21 +66,50 @@ final class HomeViewModel: ViewModelType {
             return Disposables.create()
             
         }
+        return Output.init(homeModel: homeModel,  refreshStatus: refreshStatus.asDriverOnErrorJustComplete())
         
-        return Output.init(liveModelArr: liveModelArr, selectedPost: selectedLivesModel, refreshStatus: refreshStatus.asDriverOnErrorJustComplete())
+    }
+    func data(sale:String) -> Observable<homeModel> {
+        return Observable.combineLatest(common(sale: sale),recommend(sale: sale)) {
+            
+          return  homeModel.init(recommend_data: $1, common_data:$0)
+        }
     }
     
-    func data(sale:String) -> Observable<[livesModel]> {
-        
-        return BilibiliProvider.request(.getAppNewIndex_recommend(scale: "3"))
+    func common(sale:String) -> Observable<homeCommonModel> {
+        return BilibiliProvider.request(.getAppNewIndex_common(scale:sale ))
             .shareReplay(1)
             .filter{
                 $0.statusCode == 200 ?true:false
             }
             .mapJSON()
             .map{
+                JSON.init($0)
+            }
+            .filter{
+                $0["code"].boolValue ? false:true
+            }
+            .map{
                 
-                homeRecommendModel.init(json: JSON.init($0)["data"]["recommend_data"]).lives!
+                homeCommonModel.init(json: $0["data"])
+        }
+    }
+    func recommend(sale:String) -> Observable<homeRecommendModel> {
+        
+        return BilibiliProvider.request(.getAppNewIndex_recommend(scale: sale))
+            .shareReplay(1)
+            .filter{
+                $0.statusCode == 200 ?true:false
+            }
+            .mapJSON()
+            .map{
+                JSON.init($0)
+            }
+            .filter{
+                $0["code"].boolValue ? false:true
+            }
+            .map{
+                homeRecommendModel.init(json: $0["data"]["recommend_data"])
         }
         
         

@@ -10,91 +10,180 @@ import UIKit
 import RxSwift
 import RxCocoa
 import MJRefresh
-
+import RxDataSources
+import GDPerformanceView_Swift
 class LiveViewController: BaseViewController {
-//    var model:homeModel?
-    let disposeBag = DisposeBag()
+
     var viewModel: HomeViewModel!
-    
+    var dataSource : RxCollectionViewSectionedReloadDataSource<sectionsModel>?
+    let top = UIScreenWidth*5/16 + UIScreenWidth*7/31;
+    @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var shufflingView: CirCleView!
     @IBOutlet weak var collectionView: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let layout = UICollectionViewFlowLayout.init()
-        layout.sectionInset = UIEdgeInsetsMake(10,10, 10, 10);
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 10;
-        layout.itemSize =  CGSize.init(width: (UIScreenWidth - 30)/2, height: (UIScreenWidth - 30)/2*180/320+40);
-        collectionView.collectionViewLayout  = layout;
         bindViewModel()
-    
+        topView.frame = CGRect.init(x: 0, y: -top, width: UIScreenWidth, height: top)
+        collectionView.contentInset = UIEdgeInsets.init(top: top, left: 0, bottom: 0, right: 0);
+        collectionView.addSubview(topView);
+        GDPerformanceMonitor.sharedInstance.startMonitoring()
+     
     }
     var scale = 1
     func bindViewModel() {
-      let just = Observable<String>.create {[unowned self]  observer in
-        
-        self.collectionView.mj_header = SXBilibiliNormalRefresh.init(refreshingBlock: {
-             observer.on(.next(String.init(self.scale)))
-        })
-        
-        return Disposables.create()
+        let just = Observable<String>.create {[unowned self]  observer in
+            
+            self.collectionView.mj_header = SXBilibiliNormalRefresh.init(refreshingBlock: {
+                observer.on(.next(String.init(self.scale)))
+            })
+            self.collectionView.mj_header.ignoredScrollViewContentInsetTop = self.top;
+            return Disposables.create()
+            
         }
+        
         viewModel = HomeViewModel.init(navigator:UINavigationController.init())
         assert(viewModel != nil)
-        let input = HomeViewModel.Input.init(scale: just.startWith("1").asDriverOnErrorJustComplete(), selection: collectionView.rx.itemSelected.asDriver())
-
+        
+        let input = HomeViewModel.Input.init(scale: just.startWith("3").asDriverOnErrorJustComplete(), selection: collectionView.rx.itemSelected.asDriver())
+        
         let output = viewModel.transform(input: input)
+        dataSource = RxCollectionViewSectionedReloadDataSource<sectionsModel>()
+        
+        collectionViewSectionedReloadDataSource(dataSource!)
         
         output
-            .liveModelArr
-            .scan([])
-            {  arr1,arr2 in
-                return  arr2
+            .homeModel
+            .map{
+                self.shufflingView.imageArray = $0.common_data?.banner;
+                return  $0.sections
             }
-            .filter{
-                if ($0.count>0){
-                    return true
-                }else{
-                    return false
-                }
-                
-            }
-            .drive(collectionView.rx.items(cellIdentifier: "LiveCollectionViewCell", cellType: LiveCollectionViewCell.self)){ tv, item, cell in
-               
-                cell.model = item
-                
-            }.addDisposableTo(disposeBag)
+            .asObservable()
+            .bind(to: collectionView.rx.items(dataSource: dataSource!))
+            .addDisposableTo(disposeBag)
+        
+        collectionView.rx.setDelegate(self).addDisposableTo(disposeBag)
         output.refreshStatus.drive(refreshStatusBinding).addDisposableTo(disposeBag)
-        output.selectedPost.drive().addDisposableTo(disposeBag)
-    
-    
+        
+        
+        
     }
     
+    func collectionViewSectionedReloadDataSource(_ dataSource: RxCollectionViewSectionedReloadDataSource<sectionsModel>) {
+        
+        dataSource.configureCell  = { (dataSource, collectionView, indexPath, _) in
+            let cell: LiveCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "LiveCollectionViewCell", for: indexPath) as! LiveCollectionViewCell
+            if indexPath.section == 0   {
+                cell.isAreaHidden = true
+            }else{
+                cell.isAreaHidden = false
+            }
+            cell.model =  dataSource[indexPath.section].items[indexPath.item]
+            return cell
+            
+        }
+        
+        dataSource.supplementaryViewFactory = {(dataSource, collectionView, kind, indexPath) in
+            
+            switch kind {
+            case UICollectionElementKindSectionHeader:
+                let rusableViewHeadView  = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "colllectionViewHeadView", for: indexPath) as! liveReusableHeaderView
+                rusableViewHeadView.model = dataSource[indexPath.section].headerModel
+                rusableViewHeadView.moreLive = {[unowned self]   model in
+                    
+                    log.debug(model)
+                }
+                return rusableViewHeadView
+            default:
+                let rusableViewFootView  = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "colllectionViewFootView", for: indexPath)
+                
+                return rusableViewFootView
+            }
+            
+        }
+        
+    }
+//     // MARK: StoryBoard界面跳转传参数
+//    var selectedBinding: UIBindingObserver<LiveViewController, livesModel> {
+//        return UIBindingObserver(UIElement: self, binding: {[unowned self]   (vc, model) in
+//            
+//        })
+//    }
     var refreshStatusBinding: UIBindingObserver<LiveViewController, refreshStatus> {
         return UIBindingObserver(UIElement: self, binding: {[unowned self]   (vc, refreshStatus) in
             self.collectionView.mj_header.endRefreshing()
-         
+            
             switch refreshStatus {
             case.dropDownSuccess:
                 self.scale = self.scale + 1
-             default: break
+            default: break
             }
         })
     }
+    // MARK: StoryBoard界面跳转传参数
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        let vc = segue.destination as! LiveRoomViewController
+        vc.model = sender as? livesModel
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+}
+// MARK: UICollectionViewDelegate
+extension LiveViewController:UICollectionViewDelegateFlowLayout{
+    
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        log.debug(indexPath.item)
+         let model = dataSource![indexPath.section]
+        self.performSegue(withIdentifier: "LiveRoomViewController", sender: model.items[indexPath.item])
     }
-    */
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return  UIEdgeInsetsMake(10,10, 10,10)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let model = dataSource?[indexPath.section]
+        
+        if indexPath.section == 0 {
+            if Int(Double((model!.rows.count - 1)) * 0.5) == indexPath.row{
+                
+                 return CGSize.init(width: UIScreenWidth - 20, height: (UIScreenWidth - 30)*0.5*18/32 + 40)
+            }
+            
+        }
+        return CGSize.init(width: (UIScreenWidth - 30)*0.5, height: (UIScreenWidth - 30)*0.5*18/32 + 40)
+    }
+    @available(iOS 6.0, *)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize{
+        
+        guard let _ = dataSource?[section]else {
+                return CGSize.init(width: 0, height: 0 )
+        }
+        
+        return CGSize.init(width: UIScreenWidth, height: 35 )
+        
+    }
+    
+    @available(iOS 6.0, *)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize{
+        
+        if section == 9 {
+            return CGSize.init(width: UIScreenWidth, height: 54 )
+        }
+        
+         return CGSize.init(width: 0, height: 0 )
+    }
+
+    
 
 }
+
+
