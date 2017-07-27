@@ -119,7 +119,7 @@ struct coverModel {
     let width:Float
     
     init(fromJson json:JSON) {
-        src = json["src"].url!
+        src = json["src"].url
         height = json["height"].floatValue
         width = json["width"].floatValue
     }

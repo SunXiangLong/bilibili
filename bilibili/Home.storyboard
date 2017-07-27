@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.17" systemVersion="16G12b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="nW0-h8-O0a">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G12b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="nW0-h8-O0a">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,7 +23,7 @@
                         <viewControllerLayoutGuide type="bottom" id="U8g-oy-Cxe"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="z29-Tl-XRu">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XvE-WO-DLv">
@@ -105,6 +104,9 @@
                                     <state key="selected">
                                         <color key="titleColor" red="0.98236757516860962" green="0.33403104543685913" blue="0.54182225465774536" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
+                                    <connections>
+                                        <segue destination="pBG-Ob-5WE" kind="show" id="6E9-lK-wMq"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aM0-6m-VRp">
                                     <rect key="frame" x="134.5" y="0.0" width="67.5" height="30"/>
@@ -130,6 +132,34 @@
             </objects>
             <point key="canvasLocation" x="861.60000000000002" y="-1123.088455772114"/>
         </scene>
+        <!--消息-->
+        <scene sceneID="xkx-NK-UOJ">
+            <objects>
+                <viewController hidesBottomBarWhenPushed="YES" id="pBG-Ob-5WE" customClass="EaseViewController" customModule="bilibili" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1wM-aO-ZB8"/>
+                        <viewControllerLayoutGuide type="bottom" id="cOW-1e-TBk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="jkQ-98-Lp9">
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="消息" id="p5z-eG-CuY">
+                        <barButtonItem key="leftBarButtonItem" image="left_arrow" id="TDJ-1b-nuM">
+                            <connections>
+                                <segue destination="gtx-FV-ePP" kind="unwind" unwindAction="unwindToViewController:" id="XMz-ZM-tAW"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oJ2-2H-p8x" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="gtx-FV-ePP" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="862" y="-410"/>
+        </scene>
         <!--首页导航-->
         <scene sceneID="ZV8-xN-GJI">
             <objects>
@@ -142,6 +172,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="0.98236757519999995" green="0.3340310454" blue="0.54182225470000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -165,20 +198,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="znX-5d-alq">
-                                <rect key="frame" x="0.0" y="20" width="375" height="583"/>
-                                <color key="backgroundColor" red="0.95675891637802124" green="0.95692259073257446" blue="0.95674854516983032" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="fD6-sH-HiC">
-                                    <size key="itemSize" width="275" height="236"/>
+                                    <size key="itemSize" width="275" height="186"/>
                                     <size key="headerReferenceSize" width="50" height="56"/>
                                     <size key="footerReferenceSize" width="50" height="50"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LiveCollectionViewCell" id="4u6-Hv-eLU" customClass="LiveCollectionViewCell" customModule="bilibili" customModuleProvider="target">
-                                        <rect key="frame" x="50" y="56" width="275" height="236"/>
+                                        <rect key="frame" x="50" y="56" width="275" height="186"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="275" height="236"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="275" height="186"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="livebase_default_img" translatesAutoresizingMaskIntoConstraints="NO" id="UTh-mp-euk" customClass="AnimatableImageView" customModule="IBAnimatable">
@@ -237,11 +270,20 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
+                                                <imageView hidden="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="live_home_refresh_new" translatesAutoresizingMaskIntoConstraints="NO" id="bD3-ad-K5h">
+                                                    <rect key="frame" x="174" y="85" width="101" height="101"/>
+                                                    <gestureRecognizers/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="bD3-ad-K5h" secondAttribute="height" multiplier="1:1" id="i3o-Co-zUN"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                         </view>
                                         <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="bD3-ad-K5h" secondAttribute="trailing" id="0uw-vc-dwM"/>
                                             <constraint firstItem="kPI-AD-BEl" firstAttribute="leading" secondItem="UTh-mp-euk" secondAttribute="leading" id="4KW-9r-2mZ"/>
                                             <constraint firstItem="g9c-km-z5d" firstAttribute="bottom" secondItem="TKx-cM-jza" secondAttribute="bottom" id="5Vv-y5-HyI"/>
+                                            <constraint firstAttribute="bottom" secondItem="bD3-ad-K5h" secondAttribute="bottom" id="5XF-MO-CNH"/>
                                             <constraint firstItem="kPI-AD-BEl" firstAttribute="bottom" secondItem="UTh-mp-euk" secondAttribute="bottom" id="9Cv-XK-Hhz"/>
                                             <constraint firstItem="g9c-km-z5d" firstAttribute="trailing" secondItem="UTh-mp-euk" secondAttribute="trailing" constant="-5" id="9zv-e6-Yfm"/>
                                             <constraint firstAttribute="trailing" secondItem="vT3-j1-TmL" secondAttribute="trailing" constant="5" id="IDj-gg-lkq"/>
@@ -249,6 +291,7 @@
                                             <constraint firstItem="TKx-cM-jza" firstAttribute="bottom" secondItem="UTh-mp-euk" secondAttribute="bottom" constant="-5" id="IzR-Z0-jPV"/>
                                             <constraint firstItem="vT3-j1-TmL" firstAttribute="top" secondItem="UTh-mp-euk" secondAttribute="bottom" id="JIF-36-CNb"/>
                                             <constraint firstItem="UTh-mp-euk" firstAttribute="top" secondItem="4u6-Hv-eLU" secondAttribute="top" id="LYR-6k-cFh"/>
+                                            <constraint firstItem="bD3-ad-K5h" firstAttribute="top" secondItem="UTh-mp-euk" secondAttribute="bottom" constant="-15" id="Msu-I6-zPd"/>
                                             <constraint firstItem="kPI-AD-BEl" firstAttribute="top" secondItem="UTh-mp-euk" secondAttribute="top" id="WjL-yr-yWU"/>
                                             <constraint firstAttribute="trailing" secondItem="UTh-mp-euk" secondAttribute="trailing" constant="5" id="YZy-t1-m1f"/>
                                             <constraint firstItem="kPI-AD-BEl" firstAttribute="trailing" secondItem="UTh-mp-euk" secondAttribute="trailing" id="lrd-np-ABq"/>
@@ -260,6 +303,8 @@
                                             <outlet property="liveOnline" destination="g9c-km-z5d" id="M4W-LZ-9VG"/>
                                             <outlet property="liveTitle" destination="vT3-j1-TmL" id="KEY-6V-C7m"/>
                                             <outlet property="name" destination="TKx-cM-jza" id="PWR-nT-jvv"/>
+                                            <outlet property="refreshImage" destination="bD3-ad-K5h" id="EXA-KF-c9w"/>
+                                            <outlet property="rightCS" destination="IDj-gg-lkq" id="uRJ-5c-9Ge"/>
                                             <outlet property="src" destination="UTh-mp-euk" id="Rqc-9b-wyc"/>
                                             <outlet property="srcHeightConsraint" destination="KUh-pt-b0P" id="cx3-M8-abi"/>
                                         </connections>
@@ -269,7 +314,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cqg-V3-95H" customClass="YYLabel">
+                                        <view contentMode="scaleToFill" placeholderIntrinsicWidth="0.0" placeholderIntrinsicHeight="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="cqg-V3-95H" customClass="YYLabel">
                                             <rect key="frame" x="365" y="51" width="0.0" height="0.0"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </view>
@@ -308,7 +353,7 @@
                                     </connections>
                                 </collectionReusableView>
                                 <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="colllectionViewFootView" id="Y5e-Xc-EvG">
-                                    <rect key="frame" x="0.0" y="292" width="375" height="50"/>
+                                    <rect key="frame" x="0.0" y="242" width="375" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fZ4-dC-5Eq" customClass="AnimatableButton" customModule="IBAnimatable">
@@ -351,7 +396,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rc2-RF-GAu" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <view contentMode="scaleToFill" id="FAt-zR-XWI">
+                <view hidden="YES" contentMode="scaleToFill" id="FAt-zR-XWI">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
@@ -461,7 +506,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="搜索啊" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2mh-Dy-XmZ">
-                                <rect key="frame" x="62" y="91" width="43" height="17"/>
+                                <rect key="frame" x="62" y="71" width="43" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -517,9 +562,11 @@
     <resources>
         <image name="home_home_tab" width="22" height="37"/>
         <image name="home_home_tab_s" width="22" height="37"/>
+        <image name="left_arrow" width="24" height="24"/>
         <image name="live_home_category_ico" width="52" height="52"/>
         <image name="live_home_center_ico" width="52" height="52"/>
         <image name="live_home_follow_ico" width="52" height="52"/>
+        <image name="live_home_refresh_new" width="68" height="68"/>
         <image name="live_home_search_ico" width="52" height="52"/>
         <image name="live_home_video_ico" width="52" height="52"/>
         <image name="livebase_default_img" width="33" height="31"/>

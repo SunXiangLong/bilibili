@@ -14,7 +14,7 @@ import Kingfisher
 
 class CirCleView: UIView {
     /*********************************** Property ****************************************/
-    let time = TimeInterval.init(4)        //全局的时间间隔
+    let time = TimeInterval.init(8)        //全局的时间间隔
     //MARK:- Property
     var contentScrollView: UIScrollView!
     var block:((bannerModel) -> Void)?
@@ -181,7 +181,7 @@ class CirCleView: UIView {
     /********************************** Public Methods  ***************************************/
     //MARK:- Public Methods
     func imageTapAction(_ tap: UITapGestureRecognizer){
-        
+        log.debug(indexOfCurrentImage)
         self.block!(self.imageArray[indexOfCurrentImage])
     }
     

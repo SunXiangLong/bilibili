@@ -51,6 +51,9 @@ let  BilibiliProvider =  RxMoyaProvider<Bilibili>(/*endpointClosure: endpointClo
 public enum Bilibili {
     case getAppNewIndex_recommend(scale:String)
     case getAppNewIndex_common(scale:String)
+    case getAppNewIndex_recommendRefresh
+    case getAppIndex_dynamic(area:String)
+    
 }
 /// 自定义插件实现请求添加HUD
 final class RequestAlertPlugin: PluginType {
@@ -58,7 +61,7 @@ final class RequestAlertPlugin: PluginType {
     func willSend(_ request: RequestType, target: TargetType) {
         //实现发送请求前需要做的事情
         HUD.dimsBackground = false;
-        HUD.show(.systemActivity)
+        HUD.show(.success)
     }
     func didReceive(_ result: Result<Moya.Response, MoyaError>, target: TargetType) {
         HUD.hide()
@@ -81,6 +84,10 @@ extension Bilibili:TargetType{
             return "/AppNewIndex/recommend"
         case .getAppNewIndex_common(_):
             return "/AppNewIndex/common"
+        case .getAppNewIndex_recommendRefresh:
+            return "/AppIndex/recommendRefresh"
+        case .getAppIndex_dynamic(_):
+            return "/AppIndex/dynamic"
         }
     }
     public var method: Moya.Method {
@@ -92,20 +99,43 @@ extension Bilibili:TargetType{
             return ["scale":scale,
                     "actionKey": "appkey",
                     "appkey": "27eb53fc9058f8c3",
-                    "build":"5570",
+                    "build":"5800",
                     "buvid":"aa4ee2ed6d2ec78089a21c86093a298b",
-//                    "channel":"appstore",
+                    //                    "channel":"appstore",
                     "device":"phone",
                     "mobi_app":"iphone",
                     "platform":"ios",
-                    "sign":"50650aa4031b3ffd7d6a96fcf45bca36",
-                    "ts": "1496717388"//Int(Date().timeIntervalSince1970)
+                    "sign":"512605b1692396bfcaad0cc8f3076dc7",
+//                "ts": "1498801813"//Int(Date().timeIntervalSince1970)
             ]
             
         case .getAppNewIndex_common(let scale):
             return ["scale":scale,
                     "device":"phone",
                     "platform":"ios",
+            ]
+            
+        case .getAppNewIndex_recommendRefresh:
+            return ["actionKey": "appkey",
+                    "appkey": "27eb53fc9058f8c3",
+                    "build":"5800",
+                    "device":"phone",
+                    "mobi_app":"iphone",
+                    "platform":"ios",
+                    "sign":"a3b2835248fd568f4f977f05dc97e539",
+                    "ts": "1498817320"//Int(Date().timeIntervalSince1970)
+            ]
+        case .getAppIndex_dynamic(let area):
+            return [
+                    "area":"draw",//签名方式未知，只能固定这个
+                    "actionKey": "appkey",
+                    "appkey": "27eb53fc9058f8c3",
+                    "build":"5800",
+                    "device":"phone",
+                    "mobi_app":"iphone",
+                    "platform":"ios",
+                    "sign":"6bfbe21428a38c0baa07fd77c4baf066",
+                    "ts": "1498817479"//Int(Date().timeIntervalSince1970)
             ]
             
         }
@@ -118,10 +148,9 @@ extension Bilibili:TargetType{
     }
     
     public var validate: Bool {
+        
         switch self {
-        case .getAppNewIndex_recommend(_):
-            return true
-        case .getAppNewIndex_common(scale: _):
+        default:
             return true
         }
     }

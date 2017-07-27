@@ -2,6 +2,7 @@ PODS:
   - Alamofire (4.4.0)
   - GDPerformanceView-Swift (1.2.0)
   - HandyJSON (1.7.1)
+  - Hyphenate (3.3.0)
   - IBAnimatable (3.1.3)
   - Kingfisher (3.6.1)
   - MJRefresh (3.1.12)
@@ -30,6 +31,7 @@ PODS:
 DEPENDENCIES:
   - GDPerformanceView-Swift
   - HandyJSON (from `https://github.com/alibaba/HandyJSON.git`, tag `1.7.1`)
+  - Hyphenate
   - IBAnimatable
   - Kingfisher
   - MJRefresh
@@ -71,6 +73,7 @@ SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
   GDPerformanceView-Swift: 5f12f13dcdca4cb87f91ef91ba6b50981421c57f
   HandyJSON: b0352e4c52169de4a31e9b77f9c08c1b0deffc8f
+  Hyphenate: 828b314ee8629d34ce0e5ef085eac70b6d4cc89c
   IBAnimatable: ad640d47659cbbfa4cf88a127fdc663b2ec4c66a
   Kingfisher: 2f31cb75f3e98d3d4c406cbdcd9b263e956cfa67
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
@@ -86,6 +89,6 @@ SPEC CHECKSUMS:
   UITableView+FDTemplateLayoutCell: 234e1582bcc4e18461af91155123bb96538ed030
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
 
-PODFILE CHECKSUM: a12c3747d37c626e97c0139464c8a08625a25e1e
+PODFILE CHECKSUM: 235af773d1a4f1b84ad2a2e0a4fbc82480e5a1f8
 
 COCOAPODS: 1.2.0
